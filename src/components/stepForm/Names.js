@@ -5,7 +5,6 @@ import { Button } from "@material-ui/core";
 
 export const Names = ({ formData, setForm, navigation }) => {
   const { firstName, lastName, nickName } = formData;
-  console.log(firstName);
 
   return (
     <Container maxWidth="xs">
@@ -24,6 +23,7 @@ export const Names = ({ formData, setForm, navigation }) => {
         label="Last Name"
         name="lastName"
         value={lastName}
+        onChange={setForm}
         margin="normal"
         variant="outlined"
         autoComplete="off"
@@ -33,6 +33,7 @@ export const Names = ({ formData, setForm, navigation }) => {
         label="Nick Name"
         name="nickName"
         value={nickName}
+        onChange={setForm}
         margin="normal"
         variant="outlined"
         autoComplete="off"

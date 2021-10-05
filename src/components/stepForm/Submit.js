@@ -1,9 +1,10 @@
 import React from "react";
+import { Container } from "@material-ui/core";
 
 export const Submit = () => {
   return (
-    <div className="App">
-      <h1>Submit</h1>
-    </div>
+    <Container maxWidth="sm" style={{ marginTop: "4rem" }}>
+      <h3>Thank You for Submitting!!</h3>
+    </Container>
   );
 };
