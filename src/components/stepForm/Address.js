@@ -1,72 +1,74 @@
-import React from "react";
-import Container from "@material-ui/core/Container";
+import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
+import PropTypes from "prop-types";
+import { Formik, Form, Field } from "formik";
+import { makeStyles } from "@material-ui/core/styles";
 
-export const Address = ({ formData, setForm, navigation }) => {
-  const { address, city, state, zip } = formData;
+const useStyles = makeStyles((theme) => ({
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
+
+export const Address = ({ formData, setFormData, nextStep, prevStep }) => {
+  const classes = useStyles();
+  const [direction, setDirection] = useState("back");
   return (
-    <Container maxWidth="xs">
-      <h1>Address</h1>
-      <TextField
-        label="Address"
-        name="address"
-        value={address}
-        onChange={setForm}
-        margin="normal"
-        variant="outlined"
-        autoComplete="off"
-        fullWidth
-      />
-      <TextField
-        label="City"
-        name="city"
-        value={city}
-        onChange={setForm}
-        margin="normal"
-        variant="outlined"
-        autoComplete="off"
-        fullWidth
-      />
-      <TextField
-        label="State"
-        name="state"
-        value={state}
-        onChange={setForm}
-        margin="normal"
-        variant="outlined"
-        autoComplete="off"
-        fullWidth
-      />
-      <TextField
-        label="Zip Code"
-        name="zip"
-        type="number"
-        value={zip}
-        onChange={setForm}
-        margin="normal"
-        variant="outlined"
-        autoComplete="off"
-        fullWidth
-      />
-      <div style={{ marginTop: "1rem" }}>
-        <Button
-          variant="contained"
-          color="secondary"
-          style={{ marginRight: "1rem" }}
-          onClick={() => navigation.previous()}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ marginRight: "1rem" }}
-          onClick={() => navigation.next()}
-        >
-          Next
-        </Button>
-      </div>
-    </Container>
+    <>
+      <h1 style={{ marginLeft: "35rem" }}> Address Details </h1>
+      <Formik
+        initialValues={formData}
+        onSubmit={(values) => {
+          setFormData(values);
+          direction === "back" ? prevStep() : nextStep();
+        }}
+      >
+        <Form className={classes.form}>
+          <Field
+            name="address"
+            label="Address"
+            margin="normal"
+            as={TextField}
+          />
+          <Field name="city" label="City" margin="normal" as={TextField} />
+          <Field name="state" label="State" margin="normal" as={TextField} />
+          <Field name="zip" label="Zip" margin="normal" as={TextField} />
+          <div>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() => setDirection("back")}
+            >
+              Back
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() => setDirection("forward")}
+            >
+              Continue
+            </Button>
+          </div>
+        </Form>
+      </Formik>
+    </>
   );
+};
+
+Address.propTypes = {
+  formData: PropTypes.object.isRequired,
+  setFormData: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
+  prevStep: PropTypes.func.isRequired,
 };

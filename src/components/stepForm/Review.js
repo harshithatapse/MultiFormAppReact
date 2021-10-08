@@ -1,16 +1,22 @@
 import React from "react";
-import Container from "@material-ui/core/Container";
-import { Accordion } from "@material-ui/core";
-import { AccordionSummary } from "@material-ui/core";
-import { AccordionDetails } from "@material-ui/core";
 import { ListItemText } from "@material-ui/core";
-import { IconButton } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { ListItem } from "@mui/material";
+import { List } from "@material-ui/core";
 import { Button } from "@material-ui/core";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
 
-export const Review = ({ formData, navigation }) => {
-  const { go } = navigation;
+const useStyles = makeStyles((theme) => ({
+  textCenter: {
+    textAlign: "center",
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
+
+export const Review = ({ formData, prevStep, nextStep }) => {
+  const classes = useStyles();
   const {
     firstName,
     lastName,
@@ -23,67 +29,100 @@ export const Review = ({ formData, navigation }) => {
     email,
   } = formData;
   return (
-    <Container maxWidth="sm">
-      <h3>Review</h3>
-      <RenderAccordion
-        summary="Names"
-        go={go}
-        details={[
-          { "First Name": firstName },
-          { "Last Name": lastName },
-          { "Nick Name": nickName },
-        ]}
-      />
-      <RenderAccordion
-        summary="Address"
-        go={go}
-        details={[
-          { Address: address },
-          { City: city },
-          { State: state },
-          { "Zip Code": zip },
-        ]}
-      />
-      <RenderAccordion
-        summary="Contact"
-        go={go}
-        details={[{ "Phone Number": phone }, { "E-mail": email }]}
-      />
-      <Button
-        color="primary"
-        variant="contained"
-        style={{ marginTop: "1.5rem", marginLeft: "15rem" }}
-        onClick={() => go("submit")}
-      >
-        Submit
-      </Button>
-    </Container>
+    <>
+      <h1 style={{ marginLeft: "35rem" }}> Review Data </h1>
+      <div>
+        <List>
+          <ListItem>
+            <ListItemText
+              primary="First Name"
+              secondary={firstName}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="Last Name"
+              secondary={lastName}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="Nick Name"
+              secondary={nickName}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="Address"
+              secondary={address}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="City"
+              secondary={city}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="State"
+              secondary={state}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="Zip"
+              secondary={zip}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="Phone Number"
+              secondary={phone}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="Email"
+              secondary={email}
+              className={classes.textCenter}
+            />
+          </ListItem>
+        </List>
+        <div className={classes.textCenter}>
+          <Button
+            color="secondary"
+            variant="contained"
+            className={classes.button}
+            onClick={() => prevStep()}
+          >
+            Back
+          </Button>
+
+          <Button
+            color="primary"
+            variant="contained"
+            className={classes.button}
+            onClick={() => nextStep()}
+          >
+            Confirm & Continue
+          </Button>
+        </div>
+      </div>
+    </>
   );
 };
 
-export const RenderAccordion = ({ summary, details, go }) => (
-  <Accordion>
-    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-      {summary}
-    </AccordionSummary>
-    <AccordionDetails>
-      <div>
-        {details.map((data, index) => {
-          const objKey = Object.keys(data)[0];
-          const objValue = data[Object.keys(data)[0]];
-
-          return (
-            <ListItemText key={index}>{`${objKey}: ${objValue}`}</ListItemText>
-          );
-        })}
-        <IconButton
-          color="primary"
-          component="span"
-          onClick={() => go(`${summary.toLowerCase()}`)}
-        >
-          <EditIcon />
-        </IconButton>
-      </div>
-    </AccordionDetails>
-  </Accordion>
-);
+Review.propTypes = {
+  formData: PropTypes.object.isRequired,
+  prevStep: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
+};
